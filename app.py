@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify
 import os
 import numpy as np
 import pandas as pd
+os.environ["TF_NUM_INTRAOP_THREADS"] = "1"
+os.environ["TF_NUM_INTEROP_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
 import tensorflow as tf
 import joblib
 from collections import defaultdict, deque
@@ -162,7 +165,8 @@ def health():
 @app.post("/predict")
 def predict_batch():
     data = request.get_json(silent=True)
-    print("PREDICT data:", json.dumps(data, ensure_ascii=False)[:500])
+    #print("PREDICT data:", json.dumps(data, ensure_ascii=False)[:500])
+    print("PREDICT id:", data.get("id"), "events:", len(data.get("events", [])))
 
     if not data:
         return jsonify({"error": "Expected JSON"}), 400
@@ -195,7 +199,8 @@ def predict_batch():
 @app.post("/ingest")
 def ingest_event():
     data = request.get_json(silent=True)
-    print("INGEST data:", json.dumps(data, ensure_ascii=False)[:500])
+    #print("INGEST data:", json.dumps(data, ensure_ascii=False)[:500])
+    print("INGEST id:", data.get("id"), "events:", len(data.get("events", [])))
 
     if not data:
         return jsonify({"error": "Expected JSON"}), 400
@@ -228,5 +233,5 @@ def ingest_event():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", "8080"))
+    port = int(os.environ.get("PORT", "5000"))
     app.run(host="0.0.0.0", port=port)
