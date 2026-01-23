@@ -1,7 +1,2 @@
 Flask
 gunicorn
-numpy
-pandas
-joblib
-tensorflow
-scikit-learn
