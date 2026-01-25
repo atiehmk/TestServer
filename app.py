@@ -128,26 +128,15 @@ def decode_prediction(y_pred):
     # If model outputs (1, T, 6) -> take last timestep
     if y.ndim == 3:
         y = y[:, -1, :]
-    y = np.squeeze(y)  # -> (6,) ideally
+    y = np.squeeze(y)  # -> (6,)
 
     # fallback if shape unexpected
-    if y.ndim != 1:
+    if y.ndim != 1 or y.shape[0] != len(emotion_labels):
         return {"raw": y.astype(float).tolist()}
 
+    
     scaled = y.astype(float)
-
-    result = {
-        "labels": emotion_labels,
-        "scaled": scaled.tolist(),
-        "scaled_by_label": {emotion_labels[i]: float(scaled[i]) for i in range(len(emotion_labels))},
-    }
-
-    if lab_scaler is not None and len(scaled) == len(emotion_labels):
-        orig = lab_scaler.inverse_transform(scaled.reshape(1, -1)).reshape(-1)
-        result["original"] = orig.astype(float).tolist()
-        result["original_by_label"] = {emotion_labels[i]: float(orig[i]) for i in range(len(emotion_labels))}
-
-    return result
+    return {emotion_labels[i]: float(scaled[i]) for i in range(len(emotion_labels))}
 
 
 def predict_from_events(events: list[dict], metadata: dict | None = None):
