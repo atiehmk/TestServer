@@ -19,7 +19,7 @@ app = Flask(__name__)
 CORS(app)
 
 # ===== config =====
-SEQ_LEN = 30
+SEQ_LEN = 4
 
 emotion_labels = ["Anger", "Fear", "Joy", "Sadness", "Surprise", "Confusion"]
 
