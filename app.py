@@ -248,6 +248,7 @@ from collections import defaultdict, deque
 import numpy as np
 import pandas as pd
 from flask_cors import CORS
+from flask import Flask
 
 # Set thread env vars BEFORE importing TensorFlow
 os.environ["TF_NUM_INTRAOP_THREADS"] = "1"
@@ -257,6 +258,8 @@ os.environ["OMP_NUM_THREADS"] = "1"
 import tensorflow as tf
 import joblib
 
+app = Flask(__name__)
+CORS(app)  # This allows all origins
 
 # Custom layer needed to load final_emotion_model.keras
 @tf.keras.utils.register_keras_serializable()
