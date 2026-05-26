@@ -446,7 +446,7 @@ def predict_batch():
 
     if len(events) < SEQ_LEN:
         return jsonify({
-            "error": f" Need at least {SEQ_LEN} events",
+            "error": f"Need at least {SEQ_LEN} events",
             "got": len(events)
         }), 400
 
@@ -518,22 +518,6 @@ def ingest_event():
         "prediction": pred
     }), 200
 
-@app.get("/")
-def home():
-    return "API is running", 200
-
-
-@app.get("/health")
-def health():
-    return "OK", 200
-
-
-@app.get("/version")
-def version():
-    return jsonify({
-        "version": "new-api",
-        "SEQ_LEN": SEQ_LEN
-    }), 200
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
